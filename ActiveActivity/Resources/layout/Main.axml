@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/contactNameLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/abc_text_size_title_material_toolbar"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp" />
+    <Button
+        android:id="@+id/standardButton"
+        android:text="Get Contacts"
+        android:padding="16sp"
+        android:background="@android:color/holo_blue_light"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center_horizontal" />
+    <Button
+        android:id="@+id/simpleButton "
+        android:text="Get Contacts: Simple"
+        android:padding="16sp"
+        android:background="@android:color/holo_blue_light"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>
