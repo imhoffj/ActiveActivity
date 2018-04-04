@@ -7,7 +7,7 @@ using Android.OS;
 using Android.Provider;
 using Android.Support.V7.App;
 using Android.Widget;
-
+using ActiveActivity.ACTask;
 
 namespace ActiveActivity.ACController {
 
@@ -16,6 +16,8 @@ namespace ActiveActivity.ACController {
 	/// </summary>
 	public partial class ActivityController {
 		public string AssociatedActivityId { get; internal set; } = Guid.NewGuid ().ToString ();
+
+		public ActivityScope ActivityScope { get; private set; }
 
 		public TController GetActivity<TActivity, TController> () where TActivity : ActivityController where TController : ControllerActivity<TActivity>
 		{
@@ -122,6 +124,7 @@ namespace ActiveActivity.ACController {
 
 		protected virtual void OnCreate (Bundle savedInstanceState)
 		{
+			ActivityScope = ActivityScope.Of (this.Activity);
 		}
 
 		protected virtual void Finish ()

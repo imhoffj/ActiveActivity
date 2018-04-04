@@ -17,11 +17,6 @@ namespace ActiveActivity {
 		public class MainController : ActivityController {
 
 			/// <summary>
-			/// The scope.
-			/// </summary>
-			private ActivityScope scope;
-
-			/// <summary>
 			/// Contacts the label.
 			/// </summary>
 			/// <returns>The label.</returns>
@@ -35,7 +30,6 @@ namespace ActiveActivity {
 			protected override void OnCreate (Android.OS.Bundle savedInstanceState)
 			{
 				base.OnCreate (savedInstanceState);
-				scope = ActivityScope.Of (this.Activity);
 				SetContentView (Resource.Layout.Main);
 
 				FindViewById<Button> (Resource.Id.standardButton).Click += GetContactStandard;
@@ -60,9 +54,10 @@ namespace ActiveActivity {
 
 				if (contactUri != null) {
 					var displayName = GetDisplayName (contactUri);
-					ContactLabel (scope).Text = displayName;
-					using (scope)
-						await SayHelloAsync ();
+					ContactLabel (ActivityScope).Text = displayName;
+
+					//using (scope)
+					await SayHelloAsync (ActivityScope);
 				}
 			}
 
@@ -79,9 +74,9 @@ namespace ActiveActivity {
 
 				if (contactUri != null) {
 					var displayName = GetDisplayName (contactUri);
-					ContactLabel (scope).Text = displayName;
-					using (scope)
-						await SayHelloAsync ();
+					ContactLabel (ActivityScope).Text = displayName;
+
+					await SayHelloAsync (ActivityScope);
 				}
 			}
 
@@ -102,7 +97,7 @@ namespace ActiveActivity {
 			/// Saies the hello async.
 			/// </summary>
 			/// <returns>The hello async.</returns>
-			async ActivityTask SayHelloAsync ()
+			async ActivityTask SayHelloAsync (ActivityScope scope)
 			{
 				await Task.Delay (3000); // Medium network call
 				ContactLabel (scope).Text = "Hello: " + ContactLabel (scope).Text;
