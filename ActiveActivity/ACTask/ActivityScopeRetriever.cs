@@ -5,9 +5,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 namespace ActiveActivity.ACTask {
-	/// <summary>
-	/// Activity scope retriever.
-	/// </summary>
+
 	static class ActivityScopeRetriever<TStateMachine> where TStateMachine : IAsyncStateMachine {
 		delegate ActivityScope GetActivityScopeDelegate (TStateMachine stateMachine);
 		static GetActivityScopeDelegate getter;

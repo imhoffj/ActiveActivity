@@ -8,13 +8,16 @@ using System.Diagnostics;
 namespace ActiveActivity.ACTask {
 
 	public class ActivityScopeMethodBuilder {
-		IAsyncStateMachine stateMachine;
-		SynchronizationContext syncContext;
-		ActivityScope scope;
-		ActivityTask task;
 
-		public static ActivityScopeMethodBuilder Create () => new ActivityScopeMethodBuilder (SynchronizationContext.Current);
+		#region Properties
+		public ActivityTask Task => task;
+		public IAsyncStateMachine stateMachine { get; private set; }
+		public SynchronizationContext syncContext { get; private set; }
+		public ActivityScope scope { get; private set; }
+		public ActivityTask task { get; private set; }
+		#endregion
 
+		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:ActiveActivity.ActivityTask.ActivityScopeMethodBuilder"/> class.
 		/// </summary>
@@ -26,6 +29,14 @@ namespace ActiveActivity.ACTask {
 			if (syncContext != null)
 				syncContext.OperationStarted ();
 		}
+		#endregion
+
+		#region Methods
+		/// <summary>
+		/// Create this instance.
+		/// </summary>
+		/// <returns>The create.</returns>
+		public static ActivityScopeMethodBuilder Create () => new ActivityScopeMethodBuilder (SynchronizationContext.Current);
 
 		/// <summary>
 		/// Start the specified stateMachine.
@@ -38,12 +49,12 @@ namespace ActiveActivity.ACTask {
 			scope = ActivityScopeRetriever<TStateMachine>.GetScopeFromStateMachine (ref stateMachine);
 			if (scope == null)
 				throw new InvalidOperationException ("An async method returning AsyncTask needs to have a valid parameter of type ActivityScope");
-
 			stateMachine.MoveNext ();
 		}
 
-		public ActivityTask Task => task;
-
+		/// <summary>
+		/// Sets the result.
+		/// </summary>
 		public void SetResult ()
 		{
 			if (syncContext != null)
@@ -52,6 +63,10 @@ namespace ActiveActivity.ACTask {
 			task.Completion.SetResult (default (VoidTaskResult));
 		}
 
+		/// <summary>
+		/// Sets the exception.
+		/// </summary>
+		/// <param name="ex">Ex.</param>
 		public void SetException (Exception ex)
 		{
 			task.Completion.SetException (ex);
@@ -59,11 +74,22 @@ namespace ActiveActivity.ACTask {
 				syncContext.OperationCompleted ();
 		}
 
+		/// <summary>
+		/// Required for compiler
+		/// </summary>
+		/// <param name="stateMachine">State machine.</param>
 		public void SetStateMachine (IAsyncStateMachine stateMachine)
 		{
 			this.stateMachine = stateMachine;
 		}
 
+		/// <summary>
+		/// Awaits the on completed.
+		/// </summary>
+		/// <param name="awaiter">Awaiter.</param>
+		/// <param name="stateMachine">State machine.</param>
+		/// <typeparam name="TAwaiter">The 1st type parameter.</typeparam>
+		/// <typeparam name="TStateMachine">The 2nd type parameter.</typeparam>
 		public void AwaitOnCompleted<TAwaiter, TStateMachine> (ref TAwaiter awaiter, ref TStateMachine stateMachine)
 		   where TAwaiter : INotifyCompletion
 		   where TStateMachine : IAsyncStateMachine
@@ -72,6 +98,13 @@ namespace ActiveActivity.ACTask {
 			awaiter.OnCompleted (callback);
 		}
 
+		/// <summary>
+		/// Awaits the unsafe on completed.
+		/// </summary>
+		/// <param name="awaiter">Awaiter.</param>
+		/// <param name="stateMachine">State machine.</param>
+		/// <typeparam name="TAwaiter">The 1st type parameter.</typeparam>
+		/// <typeparam name="TStateMachine">The 2nd type parameter.</typeparam>
 		public void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine> (ref TAwaiter awaiter, ref TStateMachine stateMachine)
 		   where TAwaiter : ICriticalNotifyCompletion
 		   where TStateMachine : IAsyncStateMachine
@@ -79,6 +112,12 @@ namespace ActiveActivity.ACTask {
 			AwaitOnCompleted (ref awaiter, ref stateMachine);
 		}
 
+		/// <summary>
+		/// Gets the completion action.
+		/// </summary>
+		/// <returns>The completion action.</returns>
+		/// <param name="machine">Machine.</param>
+		/// <typeparam name="TStateMachine">The 1st type parameter.</typeparam>
 		Action GetCompletionAction<TStateMachine> (ref TStateMachine machine) where TStateMachine : IAsyncStateMachine
 		{
 			// If this is our first await, such that we've not yet boxed the state machine, do so now.
@@ -90,6 +129,9 @@ namespace ActiveActivity.ACTask {
 			return new Action (runner.Run);
 		}
 
+		/// <summary>
+		/// Runner.
+		/// </summary>
 		sealed class Runner {
 			IAsyncStateMachine machine;
 			ActivityScope scope;
@@ -108,5 +150,6 @@ namespace ActiveActivity.ACTask {
 					scope.OnCompleted (Run);
 			}
 		}
+		#endregion
 	}
 }

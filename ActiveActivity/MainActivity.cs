@@ -16,12 +16,15 @@ namespace ActiveActivity {
 
 		public class MainController : ActivityController {
 
-			/// <summary>
-			/// Contacts the label.
-			/// </summary>
-			/// <returns>The label.</returns>
-			/// <param name="activity">Activity.</param>
-			TextView ContactLabel (Activity activity) => activity.FindViewById<TextView> (Resource.Id.contactNameLabel);
+			#region Fields
+			private static string HELLO_MESSAGE = "Hello";
+			#endregion
+
+			#region Properties
+			public string DisplayName { get; private set; }
+			TextView ContactLabel => ActivityScope.Instance.FindViewById<TextView> (Resource.Id.contactNameLabel);
+			#endregion
+
 
 			/// <summary>
 			/// Ons the create.
@@ -53,10 +56,7 @@ namespace ActiveActivity {
 				var contactUri = result?.Data?.Data;
 
 				if (contactUri != null) {
-					var displayName = GetDisplayName (contactUri);
-					ContactLabel (ActivityScope).Text = displayName;
-
-					//using (scope)
+					ContactLabel.Text = DisplayName = GetDisplayName (contactUri);
 					await SayHelloAsync (ActivityScope);
 				}
 			}
@@ -73,9 +73,7 @@ namespace ActiveActivity {
 				var contactUri = result.SelectedContactUri;
 
 				if (contactUri != null) {
-					var displayName = GetDisplayName (contactUri);
-					ContactLabel (ActivityScope).Text = displayName;
-
+					ContactLabel.Text = DisplayName = GetDisplayName (contactUri);
 					await SayHelloAsync (ActivityScope);
 				}
 			}
@@ -100,7 +98,7 @@ namespace ActiveActivity {
 			async ActivityTask SayHelloAsync (ActivityScope scope)
 			{
 				await Task.Delay (3000); // Medium network call
-				ContactLabel (scope).Text = "Hello: " + ContactLabel (scope).Text;
+				ContactLabel.Text = HELLO_MESSAGE + " " + DisplayName;
 			}
 
 

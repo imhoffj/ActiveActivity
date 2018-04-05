@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content;
 
 namespace ActiveActivity.ACController {
+
 	/// <summary>
 	/// Activity result.
 	/// </summary>
@@ -12,6 +13,9 @@ namespace ActiveActivity.ACController {
 		Intent Data { get; }
 	}
 
+	/// <summary>
+	/// Typed activity result.
+	/// </summary>
 	public interface ITypedActivityResult : IActivityResult {
 		void Parse (Result resultCode, int requestCode, Intent data);
 	}

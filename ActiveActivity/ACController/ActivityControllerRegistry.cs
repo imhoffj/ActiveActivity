@@ -11,7 +11,7 @@ namespace ActiveActivity.ACController {
 	/// Activity controller registry.
 	/// </summary>
 	internal static class ActivityControllerRegistry {
-		internal const string ASSOC_ACTIVITY_ID = "ASSOC_ACTIVITY_ID";
+		internal const string ASSOC_ACTIVITY_ID = "3c76e598-2e26-4302-92e0-cda251ee6ccf";
 
 		static int requestCode = 1001;
 		static readonly object requestCodeLockObj = new object ();

@@ -4,11 +4,17 @@ using Android.Content;
 
 namespace ActiveActivity.ACController {
 
-	/// <summary>
-	/// Activity result.
-	/// </summary>
 	public class ActivityResult : IActivityResult {
 
+		#region Properties
+		public Result ResultCode { get; private set; }
+		public int RequestCode { get; private set; }
+		public Intent Data { get; private set; }
+
+		Result IActivityResult.ResultCode => throw new NotImplementedException ();
+		#endregion
+
+		#region Methods
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:ActiveActivity.ActivityController.ActivityResult"/> class.
 		/// </summary>
@@ -21,11 +27,7 @@ namespace ActiveActivity.ACController {
 			RequestCode = requestCode;
 			Data = data;
 		}
+		#endregion
 
-		public Result ResultCode { get; private set; }
-		public int RequestCode { get; private set; }
-		public Intent Data { get; private set; }
-
-		Result IActivityResult.ResultCode => throw new NotImplementedException ();
 	}
 }
